@@ -47,9 +47,11 @@ function addBtn() {
   $("#addBtn").on("click", function(event) {
     event.preventDefault();
     let newQuery = $("#newQuery").val().trim();
-    buttons.push(newQuery);
-    document.getElementById('form').reset();
-    createButtons();
+    if (newQuery !== '') {
+      buttons.push(newQuery);
+      document.getElementById('form').reset();
+      createButtons();
+    }
   });
 }
 
