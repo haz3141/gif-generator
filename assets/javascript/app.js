@@ -10,7 +10,9 @@ const createButtons = () => {
 }
 
 function getGif() {
-    $('.gifBtn').click(function() {
+    $('.gifBtn').click(function(event) {
+      event.preventDefault();
+      console.log('here');
         let query = this.getAttribute('data-value');
 
         let queryURL = 'https://api.giphy.com/v1/gifs/search?q=' + query + '&limit=10&api_key=qcPjtIk81Q4pg5dxw3fy3Z6hxO41PlGD';
@@ -19,13 +21,15 @@ function getGif() {
             url: queryURL,
             method: "GET"
         }).then(function(response) {
-            
+          console.log(response);
             for (let i = 0; i < 10; i++) {
-                let stillURL = response.data[i].images.original_still.url;
+                let stillURL = response.data[i].images.fixed_height_small_still.url;
                 let animateURL = response.data[i].images.original.url;
-                let gif = $('<img>');
-                gif.attr('class', 'gif').attr('src', stillURL).attr('data-animate', animateURL).attr('data-still', stillURL).attr('data-state', 'still');
-                $('#gifs').prepend(gif);
+                let gif = `<img class='gif' src='${stillURL}' data-animate='${animateURL}' data-still='${stillURL}' data-state='still'>`;
+                // gif.attr('class', 'gif').attr('src', stillURL).attr('data-animate', animateURL).attr('data-still', stillURL).attr('data-state', 'still');
+                let rating = `<p>${response.data[i].rating}</p>`;
+                let gifDiv = `<div class='gif-div'>${rating}${gif}`;
+                $('#gifs').prepend(gifDiv);
             }
 
             $(".gif").on("click", function() {
@@ -40,7 +44,6 @@ function getGif() {
             });
         });
     });
-    
 }
 
 function addBtn() {
