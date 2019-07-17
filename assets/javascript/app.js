@@ -22,28 +22,31 @@ function getGif() {
             method: "GET"
         }).then(function(response) {
           console.log(response);
-            for (let i = 0; i < 10; i++) {
-                let stillURL = response.data[i].images.fixed_height_small_still.url;
-                let animateURL = response.data[i].images.original.url;
-                let gif = `<img class='gif' src='${stillURL}' data-animate='${animateURL}' data-still='${stillURL}' data-state='still'>`;
-                // gif.attr('class', 'gif').attr('src', stillURL).attr('data-animate', animateURL).attr('data-still', stillURL).attr('data-state', 'still');
-                let rating = `<p>${response.data[i].rating}</p>`;
-                let gifDiv = `<div class='gif-div'>${rating}${gif}`;
-                $('#gifs').prepend(gifDiv);
-            }
-
-            $(".gif").on("click", function() {
-              let state = $(this).attr('data-state');
-              if (state === 'still') {
-                $(this).attr('data-state', 'animate');
-                $(this).attr('src', $(this).attr('data-animate'));
-              } else {
-                $(this).attr('data-state', 'still');
-                $(this).attr('src', $(this).attr('data-still'));
-              }
-            });
+          for (let i = 0; i < 10; i++) {
+            let stillURL = response.data[i].images.fixed_height_small_still.url;
+            let animateURL = response.data[i].images.original.url;
+            let gif = `<img class='gif' event='false' src='${stillURL}' data-animate='${animateURL}' data-still='${stillURL}' data-state='still'>`;
+            // gif.attr('class', 'gif').attr('src', stillURL).attr('data-animate', animateURL).attr('data-still', stillURL).attr('data-state', 'still');
+            let rating = `<p>${response.data[i].rating}</p>`;
+            let gifDiv = `<div class='gif-div'>${rating}${gif}`;
+            $('#gifs').prepend(gifDiv);
+          }
+          animateGifs();//will keep adding event listeners each time causes bug
         });
     });
+}
+
+function animateGifs() {
+  $(".gif").on("click", function() {
+    let state = $(this).attr('data-state');
+    if (state === 'still') {
+      $(this).attr('data-state', 'animate');
+      $(this).attr('src', $(this).attr('data-animate'));
+    } else {
+      $(this).attr('data-state', 'still');
+      $(this).attr('src', $(this).attr('data-still'));
+    }
+  });
 }
 
 function addBtn() {
